@@ -1,6 +1,7 @@
 FROM camicroscope/image-decoders:latest
 
 WORKDIR /var/www
+RUN sed -i 's|http://archive.ubuntu.com|http://mirrors.aliyun.com|g' /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get -q update --fix-missing
 RUN apt-get -q install -y python3-pip openslide-tools python3-openslide vim openssl
