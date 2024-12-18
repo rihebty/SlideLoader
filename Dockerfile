@@ -1,20 +1,39 @@
 FROM camicroscope/image-decoders:latest
 
-WORKDIR /var/www
-# RUN sed -i 's|http://archive.ubuntu.com|http://mirrors.aliyun.com|g' /etc/apt/sources.list
-# RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
-RUN sed -i 's|lunar|jammy|g' /etc/apt/sources.list
-RUN sed -i 's|http://security.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
+# WORKDIR /var/www
+# # RUN sed -i 's|http://archive.ubuntu.com|http://mirrors.aliyun.com|g' /etc/apt/sources.list
+# # RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
+# RUN sed -i 's|lunar|jammy|g' /etc/apt/sources.list
+# RUN sed -i 's|http://security.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
 
 
-# RUN apt-get update
-# RUN apt-get -q update --fix-missing
+# # RUN apt-get update
+# # RUN apt-get -q update --fix-missing
+# RUN apt-get update && apt-get upgrade -y
+# RUN apt-get -q install -y python3-pip openssl
+# RUN apt-get -q install -y openslide-tools python3-openslide
+# RUN apt-get -q install -y openssl libcurl4-openssl-dev libssl-dev
+# RUN apt-get -q install -y libvips libvips-dev vim
+# 替换 Ubuntu 镜像源为阿里云源（提高安装速度），并将 Ubuntu 版本改为 23.04（或 23.10）
+RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list && \
+    sed -i 's|lunar|23.04|g' /etc/apt/sources.list && \
+    sed -i 's|jammy|23.04|g' /etc/apt/sources.list
+
+# 更新软件包列表并升级已安装软件包
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get -q install -y python3-pip openssl
-RUN apt-get -q install -y openslide-tools python3-openslide
-RUN apt-get -q install -y openssl libcurl4-openssl-dev libssl-dev
-RUN apt-get -q install -y libvips libvips-dev vim
 
+# 安装基础依赖：python3-pip 和 openssl
+RUN apt-get install -y python3-pip openssl
+
+# 安装 OpenSlide 相关工具
+RUN apt-get install -y openslide-tools python3-openslide
+
+# 安装 OpenSSL 开发工具包（libcurl4 和 libssl）
+RUN apt-get install -y libcurl4-openssl-dev libssl-dev
+
+# 安装图像处理库 libvips 和 vim 编辑器
+RUN apt-get install -y libvips libvips-dev vim
 ### Install BioFormats wrapper
 
 WORKDIR /root/src/BFBridge/python
