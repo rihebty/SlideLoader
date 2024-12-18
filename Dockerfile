@@ -7,11 +7,13 @@ RUN sed -i 's|lunar|jammy|g' /etc/apt/sources.list
 RUN sed -i 's|http://security.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
 
 
-RUN apt-get update
-RUN apt-get -q update --fix-missing
-RUN apt-get -q install -y python3-pip openslide-tools python3-openslide vim openssl
+# RUN apt-get update
+# RUN apt-get -q update --fix-missing
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get -q install -y python3-pip openssl
+RUN apt-get -q install -y openslide-tools python3-openslide
 RUN apt-get -q install -y openssl libcurl4-openssl-dev libssl-dev
-RUN apt-get -q install -y libvips libvips-dev
+RUN apt-get -q install -y libvips libvips-dev vim
 
 ### Install BioFormats wrapper
 
